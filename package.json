@@ -1,0 +1,10 @@
+{
+  "name": "smaro-rtc-server",
+  "version": "0.0.1",
+  "description": "RTC server for smaro projectg",
+  "main": "index.js",
+  "repository": "https://github.com/leejaebae/smaro",
+  "author": "leejaewon",
+  "license": "MIT",
+  "private": false
+}
