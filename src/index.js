@@ -3,6 +3,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const cors = require('cors');
+const ss = require('socket.io-stream');
 
 const app = express();
 
@@ -17,7 +18,7 @@ const options = {
 const httpsServer = https.createServer(options, app);
 
 httpsServer.listen(4040, () => console.log('start'));
-const io = require('socket.io')(httpsServer, { cors: { origin: '*' } });
+const io = require('socket.io')(5000, { cors: { origin: '*' } });
 io.attach(httpsServer);
 
 const clients = new Map();
@@ -36,9 +37,9 @@ io.sockets.on('connection', (socket) => {
 		io.to(messageData.userId).emit('message', messageData.message);
 	});
 
-	socket.on('video', (stream) => {
-		console.log(stream.userId, stream);
-		io.to(stream.userId).emit('video', stream.stream);
+	socket.on('streaming', (stream) => {
+		console.log(stream);
+		io.to(stream.userId).emit('streaming', stream.stream);
 	});
 
 	ss(socket).on('video-chunk', (stream, data) => {
