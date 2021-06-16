@@ -18,7 +18,7 @@ const options = {
 const httpsServer = https.createServer(options, app);
 
 httpsServer.listen(4040, () => console.log('start'));
-const io = require('socket.io')(5000, { cors: { origin: '*' } });
+const io = require('socket.io')(50005, { cors: { origin: '*' } });
 io.attach(httpsServer);
 
 const clients = new Map();
