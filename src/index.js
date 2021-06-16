@@ -33,12 +33,12 @@ io.sockets.on('connection', (socket) => {
 	});
 
 	socket.on('message', (messageData) => {
-		console.log(`message to ${messageData.userId}`);
-		io.to(messageData.userId).emit('message', messageData.message);
+		console.log(`message to ${messageData.targetUser}`);
+		io.to(messageData.targetUser).emit('message', messageData.message);
+		io.to(messageDate.sendUser).emit('message', messageData.message);
 	});
 
 	socket.on('streaming', (stream) => {
-		console.log(stream);
 		io.to(stream.userId).emit('streaming', stream.stream);
 	});
 
