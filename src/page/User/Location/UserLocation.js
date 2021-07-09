@@ -37,7 +37,7 @@ const MyCar = ( props ) => {
 
 
 	// var fee = 100; // 현재요금 100원으로 계산
-	const [fee , setFee] = useState(1000);
+	const [fee , setFee] = useState(100);
 
 	const [data, setData] = useState([]);
 	const [myCarLocation, setMyCarLocation] = useState('TEST위치');

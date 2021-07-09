@@ -20,9 +20,9 @@ class PayReady extends React.Component {
       vat_amount: 10, // 세금이 결제금액보다 크면 안됨
       tax_free_amount: 0,
       // router에 지정한 PayResult의 경로로 수정
-      approval_url:  Route.user.payresult,
-      fail_url: Route.user.payresult,
-      cancel_url: Route.user.payresult, //127.0.0.1:3000
+      approval_url: "http://192.168.1.22:3000/payresult", // Route.user.payresult,
+      fail_url: "http://192.168.1.22:3000/payresult", // Route.user.payresult,
+      cancel_url:"http://192.168.1.22:3000/payresult",// Route.user.payresult, //127.0.0.1:3000
     },
   };
 

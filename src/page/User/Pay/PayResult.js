@@ -60,13 +60,20 @@ class PayResult extends React.Component {
     }).then((response) => {
       // 결제 승인에 대한 응답 출력
       console.log(response);
+
+      window.localStorage.removeItem('tid');
     });
+
+    if(window.confirm("결제가 완료되었습니다")) {
+      document.location.href = Route.user.main;
+    }
   }
 
   render() {
     return (
+      // <></>
       <Background>
-        <Link to="/">
+        {/* <Link to="/">
 				<User_logo></User_logo>
 				</Link> <br/>
         <h1>
@@ -81,7 +88,7 @@ class PayResult extends React.Component {
 						처음으로
 					</button>
 					</Link>
-        </div>
+        </div> */}
 
       </Background>
     );
