@@ -5,19 +5,21 @@ import { useEffect, useState } from 'react';
 
 import './AdminTemplate.css';
 import Menu from './navigator/menu';
+import { LANGUAGE } from '../language.const';
 
 const Title = ({ pathname }) => {
+	const lang = localStorage.getItem('lang');
 	return (
 		<>
 			{pathname === Route.admin.main
-				? '주차장 현황'
+				? LANGUAGE.menu.navBar.realTimeStatus[lang]
 				: pathname === Route.admin.currentParkingList
-				? '실시간 주차 목록'
+				? LANGUAGE.menu.navBar.realTimeList[lang]
 				: pathname === Route.admin.Income
-				? '수입 조회'
+				? LANGUAGE.menu.navBar.searchIncome[lang]
 				: pathname === Route.admin.allParkingData
-				? '전체 주차 데이터'
-				: '에러'}
+				? LANGUAGE.menu.navBar.getAllData[lang]
+				: LANGUAGE.common.error[lang]}
 		</>
 	);
 };
@@ -27,22 +29,20 @@ const AdminTemplate = ({ children }) => {
 	// const [isLogin, setIsLogin] = useState(false);
 
 	useEffect(() => {
-		if(!localStorage.getItem('tokenCode')){
-		// sessionStorage 에 user_id 라는 key 값으로 저장된 값이 없다면
-		//   console.log('isLogin ?? :: ', isLogin)
+		if (!localStorage.getItem('tokenCode')) {
+			// sessionStorage 에 user_id 라는 key 값으로 저장된 값이 없다면
+			//   console.log('isLogin ?? :: ', isLogin)
 
-		  document.location.href = "/admin"; 
-		} 
+			document.location.href = '/admin';
+		}
 		// else {
 		// // sessionStorage 에 user_id 라는 key 값으로 저장된 값이 있다면
 		// // 로그인 상태 변경
 		//   setIsLogin(true)
 		//   console.log('isLogin ?? :: ', isLogin)
 		// }
-	  })
-// ///////////////////////
-
-
+	});
+	// ///////////////////////
 
 	const pathName = useLocation().pathname;
 	console.log(pathName);
@@ -61,15 +61,6 @@ const AdminTemplate = ({ children }) => {
 };
 
 export default AdminTemplate;
-
-
-
-
-
-
-
-
-
 
 // const [title, setTitle] = useState('주차장 현황'); // 상단바 이름
 

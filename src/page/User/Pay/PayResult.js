@@ -1,11 +1,12 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import userlogo_img from '../../../style/img/sumaro_circle.png';
-import { Link, useLocation , Redirect } from 'react-router-dom';
+import { Link, useLocation, Redirect } from 'react-router-dom';
 import './payresult.css';
 
 import { Route } from '../../../config/routes';
+import { LANGUAGE } from '../../../language.const';
 
 const Background = styled.div`
 	text-align: center;
@@ -21,59 +22,61 @@ const User_logo = styled.div`
 	background-size: contain;
 	background-repeat: no-repeat;
 `;
+
+const lang = localStorage.getItem('lang');
 class PayResult extends React.Component {
-  constructor(props) {
-    super(props);
-    const { params } = this.state;
-    const {
-      location: { search },
-    } = props;
+	constructor(props) {
+		super(props);
+		const { params } = this.state;
+		const {
+			location: { search },
+		} = props;
 
-    // url에 붙어서 온 pg_token을 결제 API에 줄 params에 할당
-    params.pg_token = search.split("=")[1];
-  }
+		// url에 붙어서 온 pg_token을 결제 API에 줄 params에 할당
+		params.pg_token = search.split('=')[1];
+	}
 
-  state = {
-    params: {
-      cid: "TC0ONETIME",
-      // localstorage에서 tid값을 읽어온다.
-      tid: window.localStorage.getItem("tid"),
-      partner_order_id: "partner_order_id",
-      partner_user_id: "partner_user_id",
-      pg_token: "",
-    },
-  };
+	state = {
+		params: {
+			cid: 'TC0ONETIME',
+			// localstorage에서 tid값을 읽어온다.
+			tid: window.localStorage.getItem('tid'),
+			partner_order_id: 'partner_order_id',
+			partner_user_id: 'partner_user_id',
+			pg_token: '',
+		},
+	};
 
-  componentDidMount() {
-    const { params } = this.state;
+	componentDidMount() {
+		const { params } = this.state;
 
-    console.log(this.state.pg_token)
+		console.log(this.state.pg_token);
 
-    axios({
-      url: "/v1/payment/approve",
-      method: "POST",
-      headers: {
-        Authorization: "KakaoAK 61ba2289c1c4f8b0fb0f53eb2ae8cf41",
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
-      params,
-    }).then((response) => {
-      // 결제 승인에 대한 응답 출력
-      console.log(response);
+		axios({
+			url: '/v1/payment/approve',
+			method: 'POST',
+			headers: {
+				Authorization: 'KakaoAK 61ba2289c1c4f8b0fb0f53eb2ae8cf41',
+				'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+			},
+			params,
+		}).then((response) => {
+			// 결제 승인에 대한 응답 출력
+			console.log(response);
 
-      window.localStorage.removeItem('tid');
-    });
+			window.localStorage.removeItem('tid');
+		});
 
-    if(window.confirm("결제가 완료되었습니다")) {
-      document.location.href = Route.user.main;
-    }
-  }
+		if (window.confirm(LANGUAGE.user.payment.alert.confirm[lang])) {
+			document.location.href = Route.user.main;
+		}
+	}
 
-  render() {
-    return (
-      // <></>
-      <Background>
-        {/* <Link to="/">
+	render() {
+		return (
+			// <></>
+			<Background>
+				{/* <Link to="/">
 				<User_logo></User_logo>
 				</Link> <br/>
         <h1>
@@ -89,9 +92,8 @@ class PayResult extends React.Component {
 					</button>
 					</Link>
         </div> */}
-
-      </Background>
-    );
-  }
+			</Background>
+		);
+	}
 }
 export default PayResult;

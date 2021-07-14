@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2'; // chart.js import
-import { getAdminFeeGraph, getFeeDataLabeledByWeek , getFeeDataLabeledByMonth , setAdminFee, getFee } from '../../../api/admin';
+import {
+	getAdminFeeGraph,
+	getFeeDataLabeledByWeek,
+	getFeeDataLabeledByMonth,
+	setAdminFee,
+	getFee,
+} from '../../../api/admin';
 // import CurrentPList from '../CurrentParkingList/AdminCurrentParkingList';
 import './admin_income.css';
 import useModal from '../../../template/modal/useModal';
+import { LANGUAGE } from '../../../language.const';
 
 // import chart from './IncomeChart';
 // import { data } from './IncomeChart';
@@ -26,6 +33,8 @@ import useModal from '../../../template/modal/useModal';
  */
 
 ////////////////////////
+
+const lang = localStorage.getItem('lang');
 
 const Income = () => {
 	const [chartDataList, setChartDataList] = useState([]); // 차트 데이터 배열
@@ -118,10 +127,10 @@ const Income = () => {
 	}, []);
 
 	// useEffect(() => {
-		// getFee(setFee);
-		// handleGetData();
-		// console.log('요금 받아왔음');
-		// refFee.current.value = fee;
+	// getFee(setFee);
+	// handleGetData();
+	// console.log('요금 받아왔음');
+	// refFee.current.value = fee;
 	// }, [fee]);
 
 	useEffect(() => {
@@ -129,25 +138,26 @@ const Income = () => {
 		// setTotal(0);
 		console.log('usePeriod : ' + usePeriod);
 		// map을 이용해 데이터(총 요금)&라벨(날짜) 배열에 추가
-		
-		if(usePeriod === 'day') { // 일별로 출력
+
+		if (usePeriod === 'day') {
+			// 일별로 출력
 			feeData.length !== 0 &&
-			feeData.map(
-				(fee) => (
-					(totalIncome += fee.fee_day),
-					chartData.push(fee.fee_day),
-					// console.log(typeof fee.fee_day),
-					chartLabel.push(fee.fee_date)
-				)
-			);
-		}
-		else if(usePeriod === 'week') { // 주별로 출력
-			if(feeData.length !== 0) {
-				for(var i = 0 ; i < feeData.length ; i++) {
+				feeData.map(
+					(fee) => (
+						(totalIncome += fee.fee_day),
+						chartData.push(fee.fee_day),
+						// console.log(typeof fee.fee_day),
+						chartLabel.push(fee.fee_date)
+					)
+				);
+		} else if (usePeriod === 'week') {
+			// 주별로 출력
+			if (feeData.length !== 0) {
+				for (var i = 0; i < feeData.length; i++) {
 					var label = '';
 					totalIncome += feeData[i].fee_day;
 					chartData.push(feeData[i].fee_day);
-					label += feeData[i].fee_start_date+'~';
+					label += feeData[i].fee_start_date + '~';
 					label += feeData[i].fee_end_date;
 					chartLabel.push(label);
 				}
@@ -162,18 +172,17 @@ const Income = () => {
 			// 		chartLabel.push(label)
 			// 	)
 			// );
-		}
-		else if(usePeriod === 'month') { // 월별로 출력
-			if(feeData.length !== 0) {
-				for(var i = 0 ; i < feeData.length ; i++) {
+		} else if (usePeriod === 'month') {
+			// 월별로 출력
+			if (feeData.length !== 0) {
+				for (var i = 0; i < feeData.length; i++) {
 					totalIncome += feeData[i].fee_day;
 					chartData.push(feeData[i].fee_day);
 					// chartLabel.push(feeData[i].fee_start_date);
-					
-					feeData[i].fee_date.substring(8, 10) === '01' ?
-					chartLabel.push(feeData[i].fee_date.substring(0, 7))
-					:
-					chartLabel.push(feeData[i].fee_date.substring(0, 10))
+
+					feeData[i].fee_date.substring(8, 10) === '01'
+						? chartLabel.push(feeData[i].fee_date.substring(0, 7))
+						: chartLabel.push(feeData[i].fee_date.substring(0, 10));
 				}
 			}
 
@@ -191,7 +200,6 @@ const Income = () => {
 			// 	)
 			// );
 		}
-
 
 		// feeData.length !== 0 &&
 		// 	feeData.map(
@@ -286,31 +294,31 @@ const Income = () => {
 		const periodText = e.target.value;
 		const period = setPeriod(periodText);
 		const start = new Date(new Date() - 1000 * 60 * 60 * 24 * period);
-		console.log(period+'일 전부터');
+		console.log(period + '일 전부터');
 		setStartDate(start);
 		setEndDate(new Date());
 		refStart.current.value = start.toISOString().substring(0, 10);
-		refEnd.current.value = new Date(new Date() - 1000 * 60 * 60 * 24).toISOString().substring(0, 10);
+		refEnd.current.value = new Date(new Date() - 1000 * 60 * 60 * 24)
+			.toISOString()
+			.substring(0, 10);
 
 		// var dateDifference = (new Date() - start) / 1000 * 60 * 60 * 24;
 		// console.log(dateDifference);
 
-		if(period === 7 || period === 30) {
+		if (period === 7 || period === 30) {
 			setUsePeriod('day');
 			getAdminFeeGraph(setFeeData, start, endDate);
-		}
-		else if(period == 180) {
+		} else if (period == 180) {
 			setUsePeriod('week');
-			console.log('dfdfdfae')
+			console.log('dfdfdfae');
 			getFeeDataLabeledByWeek(setFeeData, start, endDate);
-		}
-		else {
+		} else {
 			setUsePeriod('month');
 			getFeeDataLabeledByMonth(setFeeData, start, endDate);
 		}
 
 		// if문 넣고 날짜 차수에 따라 다른 api 쓰기
-		
+
 		// getAdminFeeGraph(setFeeData, start, new Date());
 	};
 
@@ -320,7 +328,7 @@ const Income = () => {
 		var elapsedDays = Interval / (1000 * 60 * 60 * 24); // 며칠 차이나는지 구하기
 
 		return elapsedDays;
-	}
+	};
 
 	// 기간선택 & 데이터 가져오기 - 라디오
 	const handleGetData = (e) => {
@@ -354,18 +362,18 @@ const Income = () => {
 		// console.log("끝 : " + endDate);
 
 		//////
-		if(getIntervalStartEnd(refStart.current.value , refEnd.current.value) <= 32){
+		if (getIntervalStartEnd(refStart.current.value, refEnd.current.value) <= 32) {
 			setUsePeriod('day');
 			console.log('getIntervalStartEnd');
 			getAdminFeeGraph(setFeeData, startDate, endDate);
-		}
-		else if(32 <= getIntervalStartEnd(refStart.current.value , refEnd.current.value)
-			&& getIntervalStartEnd(refStart.current.value , refEnd.current.value) <= 180) {
+		} else if (
+			32 <= getIntervalStartEnd(refStart.current.value, refEnd.current.value) &&
+			getIntervalStartEnd(refStart.current.value, refEnd.current.value) <= 180
+		) {
 			setUsePeriod('week');
 			console.log('getIntervalStartEnd');
 			getFeeDataLabeledByWeek(setFeeData, startDate, endDate);
-		}
-		else {
+		} else {
 			setUsePeriod('month');
 			console.log('getIntervalStartEnd');
 			getFeeDataLabeledByMonth(setFeeData, startDate, endDate);
@@ -392,9 +400,8 @@ const Income = () => {
 	};
 
 	const setFeeFormat = (total) => {
-		return total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-	}
-
+		return total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+	};
 
 	return (
 		<>
@@ -408,30 +415,30 @@ const Income = () => {
 							onClick={handleGetDataBtn}
 							value='week'
 							name='period'>
-							일주일
+							{LANGUAGE.common.week[lang]}
 						</button>
 						<button
 							className='income_searchbtn'
 							onClick={handleGetDataBtn}
 							value='1month'
 							name='period'>
-							1개월
+							{LANGUAGE.common.aMonth[lang]}
 						</button>
 						<button
 							className='income_searchbtn'
 							onClick={handleGetDataBtn}
 							value='6month'
 							name='period'>
-							6개월
+							{LANGUAGE.common.sixMonth[lang]}
 						</button>
 						<button
 							className='income_searchbtn'
 							onClick={handleGetDataBtn}
 							value='year'
 							name='period'>
-							1년
+							{LANGUAGE.common.aYear[lang]}
 						</button>
-						<span className='date_standard'>기간</span>
+						<span className='date_standard'>{LANGUAGE.admin.AdminIncome.period[lang]}</span>
 						<input
 							className='income_datebox'
 							ref={refStart}
@@ -448,7 +455,9 @@ const Income = () => {
 							type='date'
 							min={startDate.toISOString().substring(0, 10)}
 							max={new Date(new Date() - 1000 * 60 * 60 * 24).toISOString().substring(0, 10)}
-							defaultValue={new Date(new Date() - 1000 * 60 * 60 * 24).toISOString().substring(0, 10)}
+							defaultValue={new Date(new Date() - 1000 * 60 * 60 * 24)
+								.toISOString()
+								.substring(0, 10)}
 						/>
 						&nbsp;
 						{/* <input 
@@ -484,16 +493,17 @@ const Income = () => {
 							className='income_searchbtn'
 							onClick={handleGetData}
 							type='button'
-							value='조회'
+							value={LANGUAGE.common.search[lang]}
 						/>
 						{/* <button className='openModal' onClick={modalOpen}>요금 변경</button> */}
 					</div>
 				</div>
 				<div className='income'>
-					총 수입 <span className='allOfIncome'>{setFeeFormat(total)}</span>원 &nbsp;
+					{LANGUAGE.admin.AdminIncome.totalFee[lang]}{' '}
+					<span className='allOfIncome'>{setFeeFormat(total)}</span>₩ &nbsp;
 					<button className='setFee_Btn' onClick={openModal}></button>
 				</div>
-{/* 				
+				{/* 				
 				<br /> */}
 			</div>
 			{/* 차트 */}
@@ -501,17 +511,19 @@ const Income = () => {
 				{feeData.length > 0 ? (
 					<Line id='test' data={data} options={options} />
 				) : (
-					<div className='no_data'>데이터가 없습니다</div>
+					<div className='no_data'>{LANGUAGE.common.canNotFindData[lang]}</div>
 				)}
 			</div>
 			{/* 요금 설정 */}
 			<Modal>
 				<div className='setFee'>
-					현재 요금은 시간당 {fee}원 이며,&nbsp;&nbsp;
+					{LANGUAGE.admin.AdminIncome.currentFeeIs[lang](fee)}&nbsp;&nbsp;
 					<input type='number' ref={refFee} defaultValue={fee} />
-					원으로 변경합니다. &nbsp;&nbsp;&nbsp;
-					<br/>
-					<button id='set_fee_btn' onClick={handleSetFee}>설정</button>
+					{LANGUAGE.admin.AdminIncome.changeTo[lang]} &nbsp;&nbsp;&nbsp;
+					<br />
+					<button id='set_fee_btn' onClick={handleSetFee}>
+						{LANGUAGE.common.setting[lang]}
+					</button>
 				</div>
 			</Modal>
 		</>

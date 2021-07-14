@@ -4,13 +4,16 @@ import { initJanus } from '../../../modules/client';
 import { io } from 'socket.io-client';
 import publisher from '../../../modules/publisher';
 import './admin_main.css';
+import { LANGUAGE } from '../../../language.const';
 
-const socket = io('http://52.79.82.77:50005');
+const socket = io('http://15.165.197.179:50005');
 
 const style = {
 	display: 'inline-block',
 	width: '100%',
 };
+
+const lang = localStorage.getItem('lang');
 /**
  * Main
  *
@@ -45,12 +48,12 @@ const Main = () => {
 
 	return (
 		<>
-			<div className='status'>{`현재 ${data[0]}대 주차중 ${data[1]}대 평균 대기시간 4분 오늘 매출: ${data[2]}`}원</div>
+			<div className='status'>{LANGUAGE.admin.main.status[lang](data)}</div>
 			<div style={style}>
 				<div>
 					<table className='camera'>
 						<tr>
-							<td className='video_label'>입<br/>차</td>
+							<td className='video_label'>{LANGUAGE.admin.main.input[lang]()}</td>
 							<td className='video'>
 								<img
 									alt=''
@@ -63,7 +66,7 @@ const Main = () => {
 							</td>
 						</tr>
 						<tr>
-							<td className='video_label'>출<br/>차</td>
+							<td className='video_label'>{LANGUAGE.admin.main.output[lang]()}</td>
 							<td className='video'>
 								<img
 									alt=''

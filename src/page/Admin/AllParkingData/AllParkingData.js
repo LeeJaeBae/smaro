@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './admin_AllParkingData.css';
 import { getAdminTotalCarList } from '../../../api/admin';
+import { LANGUAGE } from '../../../language.const';
 // import userEvent from '@testing-library/user-event';
 // import axios from '../../../api/axios';
 
+const lang = localStorage.getItem('lang');
 /**
  * AllParkingData
  *
@@ -34,7 +36,6 @@ const AllParkingData = () => {
 	const getToday = () => {
 		return new Date().toISOString().substring(0, 10);
 	};
-
 
 	const setPeriod = (p) => {
 		var period = 0;
@@ -95,10 +96,9 @@ const AllParkingData = () => {
 		}
 	};
 
-
 	// 요금 천단위마다 , 찍는 포맷
 	const setFeeFormat = (fee) => {
-		return fee.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		return fee.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 	};
 
 	//////////////////////////////////////////////////////////
@@ -121,31 +121,31 @@ const AllParkingData = () => {
 						onClick={setInquiryPeriodData}
 						value='today'
 						name='period'>
-						오늘
+						{LANGUAGE.admin.AllParkingData.toDay[lang]}
 					</button>
 					<button className='alldata_btn' onClick={setInquiryPeriodData} value='week' name='period'>
-						1주일
+						{LANGUAGE.admin.AllParkingData.week[lang]}
 					</button>
 					<button
 						className='alldata_btn'
 						onClick={setInquiryPeriodData}
 						value='1month'
 						name='period'>
-						1개월
+						{LANGUAGE.admin.AllParkingData.aMonth[lang]}
 					</button>
 					<button
 						className='alldata_btn'
 						onClick={setInquiryPeriodData}
 						value='3month'
 						name='period'>
-						3개월
+						{LANGUAGE.admin.AllParkingData.threeMonth[lang]}
 					</button>
 					<button
 						className='alldata_btn'
 						onClick={setInquiryPeriodData}
 						value='6month'
 						name='period'>
-						6개월
+						{LANGUAGE.admin.AllParkingData.sixMonth[lang]}
 					</button>
 					<input
 						className='alldata_date'
@@ -172,24 +172,24 @@ const AllParkingData = () => {
 						type='text'
 						className='alldata_searchbox'
 						name='numberPlate'
-						placeholder='차번호를 입력하세요'
+						placeholder={LANGUAGE.admin.AllParkingData.inputCarPlate[lang]}
 					/>
 					<input
 						type='button'
 						onClick={getAdminPeriodData}
 						className='alldata_search_btn'
-						value='조회'
+						value={LANGUAGE.common.search[lang]}
 					/>
 				</div>
 			</div>
 			<div>
 				<table className='alldata_table'>
 					<tr>
-						<th style={LeftTHstyle}>날짜</th>
-						<th>차번호</th>
-						<th>입차</th>
-						<th>출차</th>
-						<th style={RightTHstyle}>요금</th>
+						<th style={LeftTHstyle}>{LANGUAGE.admin.AllParkingData.date[lang]}</th>
+						<th>{LANGUAGE.admin.AllParkingData.numberPlate[lang]}</th>
+						<th>{LANGUAGE.admin.AllParkingData.inputCar[lang]}</th>
+						<th>{LANGUAGE.admin.AllParkingData.outputCar[lang]}</th>
+						<th style={RightTHstyle}>{LANGUAGE.admin.AllParkingData.fee[lang]}</th>
 						{/* <th style={RightTHstyle}>결제</th> */}
 					</tr>
 					{/* 테이블 */}
@@ -200,17 +200,13 @@ const AllParkingData = () => {
 								<td>{car.car_number_plate}</td> {/*차번호*/}
 								<td>{car.car_entry_time}</td> {/*입차*/}
 								<td>{car.car_exit_time}</td> {/*출차*/}
-								<td>
-									{ car.car_fee ?
-									setFeeFormat(car.car_fee) : car.car_fee
-									}
-								</td> {/*요금*/}
+								<td>{car.car_fee ? setFeeFormat(car.car_fee) : car.car_fee}</td> {/*요금*/}
 								{/* <td>{car.car_payment_type}결제유형</td> */}
 							</tr>
 						))
 					) : (
 						<tr>
-							<td colSpan={7}>조회 데이터가 없습니다.</td>
+							<td colSpan={7}>{LANGUAGE.admin.AllParkingData.canNotFindData[lang]}</td>
 						</tr>
 					)}
 				</table>

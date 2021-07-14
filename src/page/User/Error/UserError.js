@@ -6,6 +6,7 @@ import './user_error.css';
 
 import userlogo_img from '../../../style/img/user_logo.png';
 import error_img from '../../../style/img/error.png';
+import { LANGUAGE } from '../../../language.const';
 
 const Background = styled.div`
 	text-align: center;
@@ -21,7 +22,7 @@ const User_logo = styled.div`
 	background-size: contain;
 	background-repeat: no-repeat;
 `;
-
+const lang = localStorage.getItem('lang');
 const UserError = () => {
 	return (
 		<>
@@ -31,13 +32,13 @@ const UserError = () => {
 					<img src={error_img} alt='error_img' />
 				</div>
 				<div id='texting'>
-					<div>위치를 조회할 수 없습니다</div>
-					<div>※ 지속 조회 불가 시 관리자 문의 바랍니다</div>
+					<div>{LANGUAGE.user.error.canNotFindLocation[lang]}</div>
+					<div>※ {LANGUAGE.user.error.contactToAdmin[lang]}</div>
 				</div>
 				<div>
 					<Link to='/'>
 						<button id='searchAgain' onclick="location.href='메인페이지 주소'">
-							다시 검색하기
+							{LANGUAGE.user.location.reSearch[lang]}
 						</button>
 					</Link>
 				</div>
