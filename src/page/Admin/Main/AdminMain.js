@@ -24,6 +24,7 @@ const Main = () => {
 	const [data, setData] = useState([]);
 	const [sessinId, setSessionId] = useState('');
 	const [mediaStream, setMediaStream] = useState(undefined);
+	const [mediaStream1, setMediaStream1] = useState(undefined);
 
 	useEffect(() => {
 		getAdminLiveSituation(setData);
@@ -40,6 +41,17 @@ const Main = () => {
 			const byteArray = new Uint8Array(byteNumbers);
 			const blob = new Blob([byteArray], { type: 'image/png' });
 			setMediaStream(URL.createObjectURL(blob));
+		});
+		socket.on('streaming1', (data) => {
+			const byteChars = atob(data);
+			// console.log(byte_chars);
+			const byteNumbers = new Array(byteChars.length);
+			for (let i = 0; i < byteChars.length; i++) {
+				byteNumbers[i] = byteChars.charCodeAt(i);
+			}
+			const byteArray = new Uint8Array(byteNumbers);
+			const blob = new Blob([byteArray], { type: 'image/png' });
+			setMediaStream1(URL.createObjectURL(blob));
 		});
 	}, []);
 	useEffect(() => {
@@ -73,7 +85,7 @@ const Main = () => {
 									id='video'
 									width='870'
 									height='380'
-									src={mediaStream}
+									src={mediaStream1}
 									style={{ border: 'solid 1px black' }}
 								/>
 							</td>
